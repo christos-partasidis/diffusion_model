@@ -398,7 +398,7 @@ class Diffusion(nn.Module):
         sqrt_beta = self.extract(self.sqrt_betas, timestep, x_t.shape) #TODO
 
         # denoise at time t, utilizing predicted noise(give the equation)
-        x_t_minus_1 = (x_t - epsilon_pred * sqrt_one_minus_alpha_bar) / sqrt_alpha + sqrt_beta * z #
+        x_t_minus_1 = (1 / sqrt_alpha) * (x_t - ((1 - alpha) / sqrt_one_minus_alpha_bar) * epsilon_pred) + sqrt_beta * z
 
         # clamp x_t_minus_1 between [-1,1]
         return x_t_minus_1.clamp(-1., 1)
