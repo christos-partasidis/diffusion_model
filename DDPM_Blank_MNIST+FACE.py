@@ -397,7 +397,9 @@ class Diffusion(nn.Module):
         sqrt_one_minus_alpha_bar =self.extract(self.sqrt_one_minus_alpha_bars, timestep, x_t.shape) #TODO
         sqrt_beta = self.extract(self.sqrt_betas, timestep, x_t.shape) #TODO
 
-        # denoise at time t, utilizing predicted noise(give the equation)
+        # denoise at time t, utilizing predicted noise
+        # DDPM reverse process equation (Algorithm 2 from the paper):
+        # x_{t-1} = 1/sqrt(α_t) * (x_t - (1-α_t)/sqrt(1-ᾱ_t) * ε_θ(x_t,t)) + σ_t * z
         x_t_minus_1 = (1 / sqrt_alpha) * (x_t - ((1 - alpha) / sqrt_one_minus_alpha_bar) * epsilon_pred) + sqrt_beta * z
 
         # clamp x_t_minus_1 between [-1,1]
